@@ -1,8 +1,2 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
-.idea/
 
-AdventOfCode2024.sln.DotSettings.user
+.idea/

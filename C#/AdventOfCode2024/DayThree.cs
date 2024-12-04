@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
-Console.WriteLine(DayThree.PartOne(File.ReadAllText("inputs/3.txt")));
-Console.WriteLine(DayThree.PartTwo(File.ReadAllText("inputs/3.txt")));
+// Console.WriteLine(DayThree.PartOne(File.ReadAllText("inputs/3.txt")));
+// Console.WriteLine(DayThree.PartTwo(File.ReadAllText("inputs/3.txt")));
 
 public static class DayThree
 {
