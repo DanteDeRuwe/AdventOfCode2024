@@ -1,5 +1,5 @@
-﻿Console.WriteLine(DayFour.PartOne(File.ReadAllLines("inputs/4.txt")));
-Console.WriteLine(DayFour.PartTwo(File.ReadAllLines("inputs/4.txt")));
+﻿// Console.WriteLine(DayFour.PartOne(File.ReadAllLines("inputs/4.txt")));
+// Console.WriteLine(DayFour.PartTwo(File.ReadAllLines("inputs/4.txt")));
 
 public static class DayFour
 {
