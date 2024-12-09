@@ -44,13 +44,13 @@ public static class DayFive
     }
 }
 
-public record Rule(int Before, int After)
+record Rule(int Before, int After)
 {
     public bool AppliesTo(IList<int> numbers) => numbers.Contains(Before) && numbers.Contains(After);
     public bool IsCorrectFor(IList<int> numbers) => numbers.IndexOf(Before) < numbers.IndexOf(After);
 }
 
-public record Update(IList<int> Numbers)
+record Update(IList<int> Numbers)
 {
     public int MiddleNumber => Numbers[Numbers.Count / 2];
 

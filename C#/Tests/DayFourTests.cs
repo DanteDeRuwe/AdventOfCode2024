@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using AdventOfCode2024.DayFour;
+using FluentAssertions;
 
 namespace Tests;
 

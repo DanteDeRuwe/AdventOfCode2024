@@ -1,5 +1,6 @@
-﻿// Console.WriteLine(DayFour.PartOne(File.ReadAllLines("inputs/4.txt")));
-// Console.WriteLine(DayFour.PartTwo(File.ReadAllLines("inputs/4.txt")));
+﻿// ReSharper disable once CheckNamespace
+
+namespace AdventOfCode2024.DayFour;
 
 public static class DayFour
 {
