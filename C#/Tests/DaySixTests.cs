@@ -42,6 +42,22 @@ public class DaySixTests
                              ......#...
                              """;
         var lines = input.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        throw new NotImplementedException();
+        DaySix.PartTwo(lines).Should().Be(6);
+    }
+    
+    [Fact]
+    public void LoopCheckerTest()
+    {
+        const string input = """
+                             ....#.....
+                             .........#
+                             ...#^.....
+                             ........#.
+                             """;
+        var lines = input.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        var cells = Cells.FromLines(lines).ToArray();
+        var guardPosition = Cells.FindGuard(cells);
+        
+        guardPosition.LeadsToLoop(cells).Should().BeTrue();
     }
 }
