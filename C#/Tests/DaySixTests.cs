@@ -20,10 +20,9 @@ public class DaySixTests
                              #.........
                              ......#...
                              """;
-        
+
         var lines = input.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         DaySix.PartOne(lines).Should().Be(41);
-
     }
 
     [Fact]
@@ -44,20 +43,22 @@ public class DaySixTests
         var lines = input.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         DaySix.PartTwo(lines).Should().Be(6);
     }
-    
+
     [Fact]
-    public void LoopCheckerTest()
+    public void NextPosition()
     {
         const string input = """
-                             ....#.....
-                             .........#
-                             ...#^.....
-                             ........#.
+                             .........
+                             ....^....
                              """;
         var lines = input.Split("\n", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-        var cells = Cells.FromLines(lines).ToArray();
-        var guardPosition = Cells.FindGuard(cells);
-        
-        guardPosition.LeadsToLoop(cells).Should().BeTrue();
+
+
+        var cells = Cells.FromLines(lines);
+        var pos = Cells.FindGuard(cells);
+
+        var move = pos.NextPosition(cells);
+        move.Should().NotBeNull();
+        move!.NextPosition(cells).Should().BeNull();
     }
 }
