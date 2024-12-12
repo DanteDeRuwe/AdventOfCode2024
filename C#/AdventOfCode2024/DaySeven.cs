@@ -19,7 +19,7 @@ public static class DaySeven
         return GetResult(equations, ['+', '*', '|']);
     }
 
-    private static long GetResult(Equation[] equations, char[] possibleOperators)
+    private static long GetResult(IEnumerable<Equation> equations, char[] possibleOperators)
     {
         return equations.Aggregate(0L, (acc, equation) =>
         {
@@ -81,6 +81,8 @@ public static class PermutationGenerator
 
 public static class BaseConverter
 {
+    /// <summary>Converts a number to a different base N using the provided base characters of length N</summary>
+    /// <example>BaseConverter.Convert(8, [0,1]) -> 1111 (cf. binary)</example>
     public static string Convert(int value, char[] baseChars)
     {
         var sb = new StringBuilder();
@@ -104,13 +106,11 @@ public record Equation(long Result, long[] Numbers)
         return new Equation(long.Parse(parts[0]), parts[1].Split(' ', Defaults.SplitOptions).Select(long.Parse).ToArray());
     }
 
-    public string CreateExpression(IEnumerable<char> operators)
-    {
-        return string.Join(' ', Numbers.SkipLast(1).Zip(operators, (n, o) => $"{n} {o}")) + $" {Numbers.Last()}";
-    }
+    public string CreateExpression(IEnumerable<char> operators) => 
+        string.Join(' ', Numbers.SkipLast(1).Zip(operators, (n, o) => $"{n} {o}")) + $" {Numbers.Last()}";
 }
 
 public static class Equations
 {
-    public static Equation[] FromLines(string[] lines) => lines.Select(Equation.Parse).ToArray();
+    public static IEnumerable<Equation> FromLines(string[] lines) => lines.Select(Equation.Parse);
 }
