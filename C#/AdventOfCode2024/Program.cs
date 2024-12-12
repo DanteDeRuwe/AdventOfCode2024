@@ -1,5 +1,5 @@
-using AdventOfCode2024.DaySix;
+using AdventOfCode2024.DaySeven;
 
-var input = File.ReadAllLines("inputs/6.txt");
-// Console.WriteLine(DaySix.PartOne(input));
-Console.WriteLine(DaySix.PartTwo(input));
+var input = File.ReadAllLines("inputs/7.txt");
+Console.WriteLine(DaySeven.PartOne(input));
+Console.WriteLine(DaySeven.PartTwo(input));
