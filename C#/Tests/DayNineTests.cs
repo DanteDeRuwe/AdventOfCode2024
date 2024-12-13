@@ -15,6 +15,7 @@ public class DayNineTests
     [Fact]
     public void Test2()
     {
-        throw new NotImplementedException();
+        const string input = "2333133121414131402";
+        DayNine.PartTwo(input).Should().Be(2858);
     }
 }

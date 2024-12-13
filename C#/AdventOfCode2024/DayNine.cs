@@ -1,11 +1,12 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections;
+using System.Collections.Immutable;
 
 // ReSharper disable once CheckNamespace
 namespace AdventOfCode2024.DayNine;
 
 public static class DayNine
 {
-    public static int PartOne(string input)
+    public static long PartOne(string input)
     {
         var allInput = input.Select(c => int.Parse(c.ToString()));
 
@@ -19,6 +20,8 @@ public static class DayNine
         var result = new List<int>();
         foreach (var freeSpacesToFill in freeSpaces)
         {
+            if (blocks.IsEmpty) break; // No more blocks to add
+
             // Add first block
             var first = blocks.RemoveFirst();
             result.AddRange(first);
@@ -29,8 +32,8 @@ public static class DayNine
             var remainingSpacesToFill = freeSpacesToFill;
             while (true)
             {
+                if (blocks.IsEmpty) break; // No more blocks to add
                 var block = blocks.RemoveLast().ToArray();
-
                 if (block.Length > remainingSpacesToFill)
                 {
                     var take = block.Take(remainingSpacesToFill);
@@ -47,20 +50,73 @@ public static class DayNine
         return Checksum.Calculate(result);
     }
 
-    public static int PartTwo(string input)
+
+    // TODO instead of manipulating lists, just check in one list all the numbers, and add them to a result without removing them??
+
+    public static long PartTwo(string input)
     {
-        throw new NotImplementedException();
+        var allInput = input.Select(c => int.Parse(c.ToString())).ToArray();
+
+
+        var blocks = allInput.Index().Where(x => x.Index % 2 == 0).Select(x => Enumerable.Repeat(x.Index / 2, x.Item)).ToList();
+        var freeSpaces = allInput.Index().Where(x => x.Index % 2 == 1).Select(x => Enumerable.Repeat(-1, x.Item));
+        var representation = blocks
+            .Zip(freeSpaces, (b, f) => new[] { b, f })
+            .SelectMany(x => x)
+            .Append(blocks.Last())
+            .Select(x => x.ToList())
+            .ToList();
+
+        DoPartTwo(representation);
+
+        
+        var result = representation.SelectMany(x => x).Select(x => x == -1 ? 0 : x).ToArray(); // convert -1 to 0
+
+        return Checksum.Calculate(result);
+    }
+
+    private static void DoPartTwo(List<List<int>> representation)
+    {
+        var reversedBlocksWithOriginalIndex = representation.Index().Where(x => x.Item.Count > 0 && x.Item.All(xx => xx != -1)).Reverse().ToArray();
+
+        foreach (var (i, block) in reversedBlocksWithOriginalIndex)
+        {
+         
+            (int Index, List<int> Item) firstAvailableSpot;
+            try
+            {
+                firstAvailableSpot = representation.Index().First(x => x.Item.Count(xx => xx == -1) >= block.Count);
+                if(firstAvailableSpot.Index > i) continue; // has to be to the left of file
+            }
+            catch
+            {
+                continue; // No spot available
+            }
+
+            // Spot found!
+
+            // Set this block to empty spaces
+            representation[i] = Enumerable.Repeat(-1, block.Count).ToList();
+
+            // Add block to the first available spot
+            var allocatedSpaces = firstAvailableSpot.Item.Count(xx => xx != -1);
+            var freeSpacesLeft = firstAvailableSpot.Item.Count - block.Count - allocatedSpaces;
+            var freeSpaceBecomes = firstAvailableSpot.Item.Take(allocatedSpaces)
+                .Concat(block)
+                .Concat(Enumerable.Repeat(-1, freeSpacesLeft))
+                .ToList();
+            
+            representation[firstAvailableSpot.Index] = freeSpaceBecomes;
+        }
     }
 }
 
 public static class Checksum
 {
-    public static int Calculate(IEnumerable<int> numbers) => numbers.Index().Sum(x => x.Index * x.Item);
+    public static long Calculate(IEnumerable<int> numbers) => numbers.Index().Sum(x => (long)x.Index * x.Item);
 }
 
-public record BlockItem(int Number, int Times);
-
-public class Deque<T>(IEnumerable<T>? items = null)
+public class Deque<T>(IEnumerable<T>? items = null) : IEnumerable<T>
 {
     private readonly LinkedList<T> _list = items is null ? new() : new(items);
 
@@ -85,6 +141,8 @@ public class Deque<T>(IEnumerable<T>? items = null)
     public T PeekLast() => _list.Last.Value;
     public int Count => _list.Count;
     public bool IsEmpty => _list.Count == 0;
+    public IEnumerator<T> GetEnumerator() => _list.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
 public static class Extensions
